@@ -56,19 +56,39 @@
   the tall box (vertical-align only repositions content within a box, not
   the box itself, so it only has visible effect once the box is this tall).
 */
+/*
+  Header/footer deliberately run wider than the body text -- all the way
+  into the corner margin boxes, edge-to-edge across the physical page --
+  rather than being confined to the body's mirrored 1.1in/0.7in margins.
+  Paged.js positions each margin box by summing widths in row order, so the
+  corner boxes (natural width = the page's own left/right margin, whichever
+  that is on this page) have to carry the line too for the assembly to
+  reach the true page edge and for "Deadism"/the page number to land at the
+  true horizontal center instead of the off-center content area.
+*/
 @page content {
+  @top-left-corner {
+    content: "";
+    box-sizing: border-box;
+    height: 0.6in;
+    margin-top: 0.15in;
+    border-top: 3px double var(--deadism-rule, #333);
+  }
+
   @top-left {
     content: "";
     box-sizing: border-box;
-    height: 0.75in;
+    height: 0.6in;
+    margin-top: 0.15in;
     border-top: 3px double var(--deadism-rule, #333);
-    width: 1.3in;
+    width: 1.1in;
   }
 
   @top-center {
     content: "Deadism";
     box-sizing: border-box;
-    height: 0.75in;
+    height: 0.6in;
+    margin-top: 0.15in;
     vertical-align: top;
     padding-top: 3pt;
     font-family: Georgia, "Times New Roman", serif;
@@ -82,15 +102,33 @@
   @top-right {
     content: "";
     box-sizing: border-box;
-    height: 0.75in;
+    height: 0.6in;
+    margin-top: 0.15in;
     border-top: 3px double var(--deadism-rule, #333);
-    width: 1.3in;
+    width: 1.5in;
+  }
+
+  @top-right-corner {
+    content: "";
+    box-sizing: border-box;
+    height: 0.6in;
+    margin-top: 0.15in;
+    border-top: 3px double var(--deadism-rule, #333);
+  }
+
+  @bottom-left-corner {
+    content: "";
+    box-sizing: border-box;
+    height: 0.6in;
+    margin-bottom: 0.15in;
+    border-bottom: 3px double var(--deadism-rule, #333);
   }
 
   @bottom-left {
     content: "";
     box-sizing: border-box;
-    height: 0.75in;
+    height: 0.6in;
+    margin-bottom: 0.15in;
     border-bottom: 3px double var(--deadism-rule, #333);
     width: 2.9in;
   }
@@ -98,13 +136,37 @@
   @bottom-right {
     content: counter(page);
     box-sizing: border-box;
-    height: 0.75in;
+    height: 0.6in;
+    margin-bottom: 0.15in;
     vertical-align: bottom;
     padding-bottom: 3pt;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 10pt;
     text-align: center;
     width: 0.8in;
+  }
+
+  @bottom-right-corner {
+    content: "";
+    box-sizing: border-box;
+    height: 0.6in;
+    margin-bottom: 0.15in;
+    border-bottom: 3px double var(--deadism-rule, #333);
+  }
+}
+
+/*
+  top-left/top-right widths above (1.1in/1.5in) put "Deadism" at the true
+  horizontal page center on a :left page (left corner 1.1in, right corner
+  0.7in). On a :right page the corners mirror (0.7in/1.1in), so those two
+  widths swap to keep the title centered on the physical page either way.
+*/
+@page content:right {
+  @top-left {
+    width: 1.5in;
+  }
+  @top-right {
+    width: 1.1in;
   }
 }
 
