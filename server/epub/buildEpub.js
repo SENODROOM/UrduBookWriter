@@ -1,4 +1,4 @@
-import archiver from "archiver";
+import { ZipArchive } from "archiver";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -86,7 +86,7 @@ export async function buildEpub() {
     store.listChapters(),
   ]);
 
-  const archive = archiver("zip", { zlib: { level: 9 } });
+  const archive = new ZipArchive({ zlib: { level: 9 } });
   const chunks = [];
   archive.on("data", (chunk) => chunks.push(chunk));
   const done = new Promise((resolve, reject) => {
