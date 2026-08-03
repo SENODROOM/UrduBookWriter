@@ -7,6 +7,13 @@ async function getBrowser() {
     const { default: puppeteer } = await import("puppeteer");
     browserPromise = puppeteer.launch({ headless: true });
   }
+  const browser = await browserPromise;
+  if (!browser.connected) {
+    // Previous instance crashed/closed (e.g. after sitting idle) -- relaunch.
+    const { default: puppeteer } = await import("puppeteer");
+    browserPromise = puppeteer.launch({ headless: true });
+    return browserPromise;
+  }
   return browserPromise;
 }
 

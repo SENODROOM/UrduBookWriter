@@ -41,24 +41,36 @@
   Header/footer are built from adjacent native margin boxes rather than one
   box, so the double-rule line can span the full 3.7in content width
   (5.5in page - 1.1in inside - 0.7in outside) while being broken by the
-  title (header, centered) or page number (footer, right side) -- the empty
-  boxes carry the border, the text-bearing box doesn't, and all boxes in a
-  row share the same height so the borders line up across the gap.
+  title (header, centered) or page number (footer, right side).
+
+  Margins "not header/footer included" means the header/footer live inside
+  the existing 0.75in top/bottom margin band, flush with the physical page
+  edge -- they don't add extra space, and body text still starts exactly
+  0.75in from the page edge regardless of what's drawn in this band.
+
+  Each box spans the FULL 0.75in margin band (not just the line's own
+  thickness): for the empty/line boxes this makes border-top (header) /
+  border-bottom (footer) land exactly on the page edge, since the border is
+  always drawn at the box's own edge and the box now fills the whole band.
+  For the text boxes, vertical-align pins the text to that same edge inside
+  the tall box (vertical-align only repositions content within a box, not
+  the box itself, so it only has visible effect once the box is this tall).
 */
 @page content {
   @top-left {
     content: "";
     box-sizing: border-box;
-    height: 16pt;
-    border-bottom: 3px double var(--deadism-rule, #333);
+    height: 0.75in;
+    border-top: 3px double var(--deadism-rule, #333);
     width: 1.3in;
   }
 
   @top-center {
     content: "Deadism";
     box-sizing: border-box;
-    height: 16pt;
-    line-height: 16pt;
+    height: 0.75in;
+    vertical-align: top;
+    padding-top: 3pt;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 10.5pt;
     font-variant: small-caps;
@@ -70,24 +82,25 @@
   @top-right {
     content: "";
     box-sizing: border-box;
-    height: 16pt;
-    border-bottom: 3px double var(--deadism-rule, #333);
+    height: 0.75in;
+    border-top: 3px double var(--deadism-rule, #333);
     width: 1.3in;
   }
 
   @bottom-left {
     content: "";
     box-sizing: border-box;
-    height: 16pt;
-    border-top: 3px double var(--deadism-rule, #333);
+    height: 0.75in;
+    border-bottom: 3px double var(--deadism-rule, #333);
     width: 2.9in;
   }
 
   @bottom-right {
     content: counter(page);
     box-sizing: border-box;
-    height: 16pt;
-    line-height: 16pt;
+    height: 0.75in;
+    vertical-align: bottom;
+    padding-bottom: 3pt;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 10pt;
     text-align: center;
