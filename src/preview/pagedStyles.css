@@ -93,8 +93,8 @@
     padding-top: 3pt;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 10.5pt;
-    font-variant: small-caps;
-    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
     text-align: center;
     width: 1.1in;
   }
@@ -187,4 +187,15 @@
 .pagedjs_page {
   background: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.pagedjs_page.pagedjs_named_page.pagedjs_content_page
+  .pagedjs_margin-top-center {
+  margin-top: 4px !important ;
+}
+
+.pagedjs_page.pagedjs_named_page.pagedjs_content_page
+  .pagedjs_margin-bottom-right {
+  height: auto !important ;
+  margin-bottom: 7px !important ;
 }
