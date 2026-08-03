@@ -94,30 +94,25 @@ async function persistChapter(id: string, blocks: Block[]) {
 }
 
 // --- preview scheduling (debounced, single-flight) ---
-let previewInFlight = false;
-let previewQueued = false;
 let previewTimer: number | undefined;
+let inFlightRender: Promise<void> | null = null;
 
 function schedulePreview() {
   if (previewTimer) clearTimeout(previewTimer);
-  previewTimer = window.setTimeout(runPreview, 700);
+  previewTimer = window.setTimeout(() => runPreview(), 700);
 }
 
-async function runPreview() {
-  if (previewInFlight) {
-    previewQueued = true;
-    return;
+/** Renders the preview from the current `book` state. If a render is already in flight, waits for it, then re-renders so the result reflects the latest state (callers can safely `await` a fresh render). */
+function runPreview(): Promise<void> {
+  if (inFlightRender) {
+    return inFlightRender.then(() => runPreview());
   }
-  previewInFlight = true;
-  try {
-    await renderPreview(previewEl, book);
-  } finally {
-    previewInFlight = false;
-    if (previewQueued) {
-      previewQueued = false;
-      runPreview();
-    }
-  }
+  inFlightRender = renderPreview(previewEl, book)
+    .catch((err) => console.error("preview render failed", err))
+    .finally(() => {
+      inFlightRender = null;
+    });
+  return inFlightRender;
 }
 
 // --- helpers ---
@@ -209,6 +204,10 @@ function buildToolbar(): HTMLElement {
     const b = document.createElement("button");
     b.textContent = label;
     b.dataset.blockType = type;
+    // Clicking a button moves focus off the contenteditable block first,
+    // which collapses the selection setCurrentBlockType relies on -- block
+    // that on mousedown so the caret position survives until click fires.
+    b.onmousedown = (e) => e.preventDefault();
     b.onclick = () => {
       editor?.setCurrentBlockType(type);
       refreshToolbarActiveState();

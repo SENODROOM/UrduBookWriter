@@ -1,7 +1,15 @@
 import { Previewer } from "pagedjs";
 import baseCssUrl from "../styles/base.css?url";
+import baseCssText from "../styles/base.css?raw";
 import pagedCssUrl from "./pagedStyles.css?url";
+import pagedCssText from "./pagedStyles.css?raw";
 import { Block, BookData, escapeHtml } from "../editor/blocks";
+
+// Paged.js fetches these by URL; under Vite's dev server a bare CSS URL
+// returns an HMR-wrapped JS module, not raw CSS. Passing {url: cssText}
+// pairs instead skips the fetch entirely, using the URL only to resolve
+// relative asset references (e.g. the @font-face src) inside the sheet.
+const STYLESHEETS = [{ [baseCssUrl]: baseCssText }, { [pagedCssUrl]: pagedCssText }];
 
 function blockToHtml(block: Block): string {
   if (!block.html.trim()) return "";
@@ -52,19 +60,18 @@ export function buildBookHtml(book: BookData): string {
     )
     .join("\n");
 
-  return `<div class="deadism-book">${coverHtml}${tocHtml}${introHtml}<div class="deadism-content-flow">${chaptersHtml}</div></div>`;
+  return `<div class="deadism-book" dir="rtl">${coverHtml}${tocHtml}${introHtml}<div class="deadism-content-flow">${chaptersHtml}</div></div>`;
 }
 
 export async function renderPreview(container: HTMLElement, book: BookData) {
   container.innerHTML = "";
   const previewer = new Previewer();
   const html = buildBookHtml(book);
-  const flow = await previewer.preview(html, [baseCssUrl, pagedCssUrl], container);
+  const flow = await previewer.preview(html, STYLESHEETS, container);
   return flow;
 }
 
-/** Reads the actually-rendered footer page number for a given page element (empty string on unnumbered/front-matter pages). */
-export function renderedPageNumber(pageEl: Element): string {
-  const box = pageEl.querySelector(".pagedjs_margin-bottom-right .pagedjs_margin-content");
-  return box?.textContent?.trim() ?? "";
+/** True for pages in the main content flow (as opposed to front matter), i.e. pages that carry a visible page number. */
+export function isContentPage(pageEl: Element): boolean {
+  return pageEl.classList.contains("pagedjs_content_page");
 }

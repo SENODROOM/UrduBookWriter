@@ -2,10 +2,13 @@
   Print/preview page geometry. Margins are physical print margins as
   specified by the user (inside = 0.90in body margin + 0.20in gutter = 1.10in
   total; outside = 0.70in). Binding is right-to-left (Urdu), so the spine
-  sits on the right of the closed book: odd/recto pages are physically
-  left-hand pages (inside margin on their right) and even/verso pages are
-  physically right-hand pages (inside margin on their left) -- the mirror
-  image of an English book's :left/:right mapping.
+  sits on the right of the closed book: odd/recto pages (starting with page
+  1, the cover) are physically left-hand pages in a spread, so their inside
+  edge is on their RIGHT; even/verso pages are physically right-hand pages,
+  inside edge on their LEFT. Paged.js's own :right/:left pseudo-classes are
+  a fixed LTR-oriented convention (page 1 is always "right", verified
+  empirically -- it does not flip based on `dir`), so the assignment below
+  is intentionally the mirror of what the pseudo-class names suggest.
 */
 @page {
   size: 5.5in 8.5in;
@@ -14,13 +17,13 @@
 }
 
 @page :left {
-  margin-right: 1.1in;
-  margin-left: 0.7in;
+  margin-left: 1.1in;
+  margin-right: 0.7in;
 }
 
 @page :right {
-  margin-left: 1.1in;
-  margin-right: 0.7in;
+  margin-right: 1.1in;
+  margin-left: 0.7in;
 }
 
 /* Front matter (cover, TOC, author intro) gets no running header/footer. */
@@ -60,8 +63,8 @@
   }
 }
 
-.deadism-frontmatter .page-break,
-.deadism-content-flow .chapter-break {
+.page-break,
+.chapter-break {
   break-before: page;
 }
 

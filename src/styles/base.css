@@ -68,15 +68,15 @@
   pointer-events: none;
 }
 
-/* Title-page (cover) styling, shared by the editor's cover view and preview/epub */
+/*
+  Title-page (cover) styling, shared by the editor's cover view and
+  preview/epub. Percentage/flex vertical centering doesn't resolve inside
+  Paged.js's page content area (it has no explicit CSS height to inherit),
+  so vertical position is set with a fixed top margin instead.
+*/
 .deadism-cover {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   text-align: center;
-  gap: 1.5em;
+  margin-top: 2.6in;
 }
 
 .deadism-cover-title {
@@ -89,6 +89,7 @@
 .deadism-cover-author {
   font-family: var(--deadism-font);
   font-size: 1.1em;
+  margin-top: 1em;
 }
 
 .deadism-toc-title,
