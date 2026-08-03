@@ -99,24 +99,16 @@
   break-before: page;
 }
 
-/* Thin seam between pages (like Word's continuous print-layout view) rather than floating, separated cards. */
+/* Clear gray gap between pages, like Word's continuous print-layout view, so it's obvious where one page ends and the next begins. */
 .pagedjs_pages {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 28px;
+  padding: 28px 0;
 }
 
 .pagedjs_page {
   background: white;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
-}
-
-@media print {
-  .pagedjs_pages {
-    gap: 0;
-  }
-  .pagedjs_page {
-    box-shadow: none;
-  }
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
