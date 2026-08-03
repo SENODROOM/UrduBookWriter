@@ -39,10 +39,11 @@
 
 /*
   Header/footer are built from adjacent native margin boxes rather than one
-  box, so a single double-rule line can span the full 3.7in content width
-  (5.5in page - 1.1in inside - 0.7in outside) with a gap where the title
-  (header, centered) or page number (footer, right-aligned) breaks it --
-  the empty boxes carry the border, the text-bearing box doesn't.
+  box, so the double-rule line can span the full 3.7in content width
+  (5.5in page - 1.1in inside - 0.7in outside) while being broken by the
+  title (header, centered) or page number (footer, right side) -- the empty
+  boxes carry the border, the text-bearing box doesn't, and all boxes in a
+  row share the same height so the borders line up across the gap.
 */
 @page content {
   @top-left {
