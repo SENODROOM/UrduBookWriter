@@ -1,0 +1,101 @@
+@font-face {
+  font-family: "Noto Nastaliq Urdu";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/NotoNastaliqUrdu-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Noto Nastaliq Urdu";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/NotoNastaliqUrdu-Bold.woff2") format("woff2");
+}
+
+/*
+  Shared typography for both the editor and the paginated preview, so the two
+  never visually drift apart. Sizes are in pt (a fixed physical unit) rather
+  than px/em on the root, since the preview is print output and needs to
+  measure the same on screen and on paper.
+*/
+:root {
+  --deadism-font: "Noto Nastaliq Urdu", "Noto Naskh Arabic", serif;
+  --deadism-body-size: 16pt;
+  --deadism-line-height: 2.1;
+  --deadism-ink: #1a1a1a;
+  --deadism-rule: #333;
+}
+
+.deadism-flow {
+  direction: rtl;
+  font-family: var(--deadism-font);
+  font-size: var(--deadism-body-size);
+  line-height: var(--deadism-line-height);
+  color: var(--deadism-ink);
+}
+
+.deadism-flow[lang="ur"] {
+  unicode-bidi: isolate;
+}
+
+.block-paragraph {
+  margin: 0 0 1em;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.block-heading {
+  margin: 1.6em 0 1em;
+  font-weight: 700;
+  font-size: 1.5em;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.block-quote {
+  margin: 1.3em 2.2em;
+  padding-inline-end: 1em;
+  border-inline-end: 3px solid var(--deadism-rule);
+  font-weight: 500;
+  text-align: right;
+}
+
+.block-empty::before {
+  content: attr(data-placeholder);
+  color: #999;
+  pointer-events: none;
+}
+
+/* Title-page (cover) styling, shared by the editor's cover view and preview/epub */
+.deadism-cover {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.5em;
+}
+
+.deadism-cover-title {
+  font-family: var(--deadism-font);
+  font-weight: 700;
+  font-size: 2.4em;
+  line-height: 1.4;
+}
+
+.deadism-cover-author {
+  font-family: var(--deadism-font);
+  font-size: 1.1em;
+}
+
+.deadism-toc-title,
+.deadism-intro-title {
+  font-family: var(--deadism-font);
+  font-weight: 700;
+  font-size: 1.6em;
+  text-align: center;
+  margin-bottom: 1.4em;
+}

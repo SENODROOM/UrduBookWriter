@@ -1,0 +1,87 @@
+/*
+  Print/preview page geometry. Margins are physical print margins as
+  specified by the user (inside = 0.90in body margin + 0.20in gutter = 1.10in
+  total; outside = 0.70in). Binding is right-to-left (Urdu), so the spine
+  sits on the right of the closed book: odd/recto pages are physically
+  left-hand pages (inside margin on their right) and even/verso pages are
+  physically right-hand pages (inside margin on their left) -- the mirror
+  image of an English book's :left/:right mapping.
+*/
+@page {
+  size: 5.5in 8.5in;
+  margin-top: 0.75in;
+  margin-bottom: 0.75in;
+}
+
+@page :left {
+  margin-right: 1.1in;
+  margin-left: 0.7in;
+}
+
+@page :right {
+  margin-left: 1.1in;
+  margin-right: 0.7in;
+}
+
+/* Front matter (cover, TOC, author intro) gets no running header/footer. */
+.deadism-frontmatter {
+  page: front;
+}
+
+/* Main content restarts page numbering at 1 and gets the running header/footer. */
+.deadism-content-flow {
+  page: content;
+  counter-reset: page 1;
+}
+
+@page content {
+  @top-center {
+    content: "Deadism";
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 10.5pt;
+    letter-spacing: 0.08em;
+    text-align: center;
+    border-top: 0.75pt solid var(--deadism-rule, #333);
+    border-bottom: 0.75pt solid var(--deadism-rule, #333);
+    padding: 4pt 0;
+    width: 2.6in;
+    margin: 0 auto;
+  }
+
+  @bottom-right {
+    content: counter(page);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 10pt;
+    text-align: center;
+    border-top: 0.75pt solid var(--deadism-rule, #333);
+    border-bottom: 0.75pt solid var(--deadism-rule, #333);
+    padding: 4pt 0;
+    width: 0.5in;
+  }
+}
+
+.deadism-frontmatter .page-break,
+.deadism-content-flow .chapter-break {
+  break-before: page;
+}
+
+.pagedjs_pages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.pagedjs_page {
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+@media print {
+  .pagedjs_pages {
+    gap: 0;
+  }
+  .pagedjs_page {
+    box-shadow: none;
+  }
+}
