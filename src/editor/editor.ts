@@ -7,7 +7,7 @@ export class BlockEditor {
 
   constructor(container: HTMLElement, initialBlocks: Block[], onChange: (blocks: Block[]) => void) {
     this.container = container;
-    this.blocks = initialBlocks.length ? initialBlocks : [emptyBlock("heading")];
+    this.blocks = initialBlocks.length ? initialBlocks : [emptyBlock("paragraph")];
     this.onChange = onChange;
 
     this.container.setAttribute("contenteditable", "true");
@@ -26,7 +26,7 @@ export class BlockEditor {
   }
 
   setBlocks(blocks: Block[]) {
-    this.blocks = blocks.length ? blocks : [emptyBlock("heading")];
+    this.blocks = blocks.length ? blocks : [emptyBlock("paragraph")];
     this.render();
   }
 
