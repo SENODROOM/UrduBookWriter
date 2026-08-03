@@ -28,13 +28,13 @@ function blocksToXhtml(blocks) {
     .join("\n");
 }
 
-function xhtmlDoc(title, bodyHtml) {
+function xhtmlDoc(title, bodyHtml, cssHref = "../css/style.css") {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="ur" dir="rtl">
 <head>
 <meta charset="utf-8"/>
 <title>${escapeXml(title)}</title>
-<link rel="stylesheet" type="text/css" href="../css/style.css"/>
+<link rel="stylesheet" type="text/css" href="${cssHref}"/>
 </head>
 <body dir="rtl">
 ${bodyHtml}
@@ -185,7 +185,8 @@ export async function buildEpub() {
 
   const nav = xhtmlDoc(
     "Table of Contents",
-    `<nav epub:type="toc" id="toc"><h1>فہرست</h1><ol>\n      ${navList}\n    </ol></nav>`
+    `<nav epub:type="toc" id="toc"><h1>فہرست</h1><ol>\n      ${navList}\n    </ol></nav>`,
+    "css/style.css"
   );
   archive.append(nav, { name: "OEBPS/nav.xhtml" });
 
