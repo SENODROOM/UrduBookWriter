@@ -21,7 +21,11 @@
   measure the same on screen and on paper.
 */
 :root {
-  --deadism-font: "Noto Nastaliq Urdu", "Noto Naskh Arabic", serif;
+  /* Bundled Nastaliq only covers Urdu/Arabic-script codepoints; falling
+     straight to generic "serif" for anything else (e.g. Latin text) is
+     deliberate -- an intermediate named fallback here is a bug waiting to
+     happen if it resolves to some unrelated system font on a given machine. */
+  --deadism-font: "Noto Nastaliq Urdu", serif;
   --deadism-body-size: 16pt;
   --deadism-line-height: 2.1;
   --deadism-ink: #1a1a1a;
@@ -86,7 +90,10 @@
 }
 
 .deadism-cover-title {
-  font-family: var(--deadism-font);
+  /* The book title is always the Latin proper name "Deadism" (see the
+     running header), never Urdu, so it uses a plain Latin serif directly
+     rather than routing through the Urdu font stack. */
+  font-family: Georgia, "Times New Roman", serif;
   font-weight: 700;
   font-size: 2.4em;
   line-height: 1.4;

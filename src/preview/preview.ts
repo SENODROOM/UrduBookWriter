@@ -68,6 +68,17 @@ export async function renderPreview(container: HTMLElement, book: BookData) {
   const previewer = new Previewer();
   const html = buildBookHtml(book);
   const flow = await previewer.preview(html, STYLESHEETS, container);
+
+  // Paged.js's own font wait can resolve before the Noto Nastaliq Urdu
+  // @font-face has actually finished applying, letting the browser paint
+  // with a fallback font (very different vertical metrics) right up until
+  // the swap happens. If a caller (e.g. the PDF export's Puppeteer capture)
+  // reads the layout before that swap, the fallback gets baked in
+  // permanently. Wait for the Font Loading API directly, then give layout a
+  // moment to settle after any reflow the swap causes.
+  await document.fonts.ready;
+  await new Promise((resolve) => setTimeout(resolve, 150));
+
   return flow;
 }
 
