@@ -4,6 +4,7 @@ import baseCssText from "../styles/base.css?raw";
 import pagedCssUrl from "./pagedStyles.css?url";
 import pagedCssText from "./pagedStyles.css?raw";
 import { Block, BookData, escapeHtml } from "../editor/blocks";
+import { fontStackFor } from "../editor/fonts";
 
 // Paged.js fetches these by URL; under Vite's dev server a bare CSS URL
 // returns an HMR-wrapped JS module, not raw CSS. Passing {url: cssText}
@@ -21,6 +22,10 @@ function blockToHtml(block: Block): string {
 
 function blocksToHtml(blocks: Block[]): string {
   return blocks.map(blockToHtml).join("\n");
+}
+
+function cssStringLiteral(text: string): string {
+  return `'${text.replace(/\\/g, "\\\\").replace(/'/g, "\\'")}'`;
 }
 
 export function buildBookHtml(book: BookData): string {
@@ -60,11 +65,36 @@ export function buildBookHtml(book: BookData): string {
     )
     .join("\n");
 
-  return `<div class="deadism-book" dir="rtl">${coverHtml}${tocHtml}${introHtml}<div class="deadism-content-flow">${chaptersHtml}</div></div>`;
+  // NOTE: deliberately no dir="rtl" here -- Chromium's print/PDF pipeline
+  // mirrors the whole page layout (margins, running content) for RTL-rooted
+  // documents, which is correct for reflowable web pages but wrong here
+  // since Paged.js has already computed physical left/right margins itself.
+  // Individual text elements below still carry their own dir="rtl" for
+  // correct bidi text rendering.
+  return `<div class="deadism-book">${coverHtml}${tocHtml}${introHtml}<div class="deadism-content-flow">${chaptersHtml}</div></div>`;
+}
+
+/**
+ * Header text/on-off and the chosen Urdu font are user settings (meta.json).
+ * They're applied as CSS custom properties on the document root -- not on
+ * the .deadism-book wrapper -- because Paged.js's margin boxes (running
+ * header/footer) are generated as siblings outside the original content
+ * tree once chunking happens, so only a root-level property reaches them.
+ */
+function applyRootStyleVars(book: BookData) {
+  const root = document.documentElement.style;
+  const headerText = book.meta.headerEnabled ? book.meta.headerText || "Deadism" : "";
+  root.setProperty("--deadism-header-text", cssStringLiteral(headerText));
+  root.setProperty(
+    "--deadism-header-border",
+    book.meta.headerEnabled ? "3px double var(--deadism-rule, #333)" : "none"
+  );
+  root.setProperty("--deadism-font", fontStackFor(book.meta.fontKey));
 }
 
 export async function renderPreview(container: HTMLElement, book: BookData) {
   container.innerHTML = "";
+  applyRootStyleVars(book);
   const previewer = new Previewer();
   const html = buildBookHtml(book);
   const flow = await previewer.preview(html, STYLESHEETS, container);

@@ -72,7 +72,7 @@
     box-sizing: border-box;
     height: 0.6in;
     margin-top: 0.15in;
-    border-top: 3px double var(--deadism-rule, #333);
+    border-top: var(--deadism-header-border, 3px double var(--deadism-rule, #333));
   }
 
   @top-left {
@@ -80,12 +80,12 @@
     box-sizing: border-box;
     height: 0.6in;
     margin-top: 0.15in;
-    border-top: 3px double var(--deadism-rule, #333);
+    border-top: var(--deadism-header-border, 3px double var(--deadism-rule, #333));
     width: 1.1in;
   }
 
   @top-center {
-    content: "Deadism";
+    content: var(--deadism-header-text, "Deadism");
     box-sizing: border-box;
     height: 0.6in;
     margin-top: 0.15in;
@@ -104,7 +104,7 @@
     box-sizing: border-box;
     height: 0.6in;
     margin-top: 0.15in;
-    border-top: 3px double var(--deadism-rule, #333);
+    border-top: var(--deadism-header-border, 3px double var(--deadism-rule, #333));
     width: 1.5in;
   }
 
@@ -113,7 +113,7 @@
     box-sizing: border-box;
     height: 0.6in;
     margin-top: 0.15in;
-    border-top: 3px double var(--deadism-rule, #333);
+    border-top: var(--deadism-header-border, 3px double var(--deadism-rule, #333));
   }
 
   @bottom-left-corner {

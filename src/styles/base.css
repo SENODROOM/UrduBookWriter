@@ -14,6 +14,32 @@
   src: url("../assets/fonts/NotoNastaliqUrdu-Bold.woff2") format("woff2");
 }
 
+@font-face {
+  font-family: "Noto Naskh Arabic";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/NotoNaskhArabic-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Noto Naskh Arabic";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/NotoNaskhArabic-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  /* Gulzar ships one weight only; browsers synthesize bold from it well
+     enough for a decorative display face, so no separate bold file. */
+  font-family: "Gulzar";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../assets/fonts/Gulzar-Regular.woff2") format("woff2");
+}
+
 /*
   Shared typography for both the editor and the paginated preview, so the two
   never visually drift apart. Sizes are in pt (a fixed physical unit) rather

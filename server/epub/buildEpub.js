@@ -8,6 +8,32 @@ import * as store from "../content-store.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FONT_DIR = path.resolve(__dirname, "../../src/assets/fonts");
 
+// Mirrors src/editor/fonts.ts -- kept as a separate small table here since
+// server files are plain Node ESM, not run through Vite's TS pipeline.
+const FONT_OPTIONS = {
+  notoNastaliqUrdu: {
+    familyName: "Noto Nastaliq Urdu",
+    stack: '"Noto Nastaliq Urdu", serif',
+    faces: [
+      { weight: 400, file: "NotoNastaliqUrdu-Regular.woff2" },
+      { weight: 700, file: "NotoNastaliqUrdu-Bold.woff2" },
+    ],
+  },
+  notoNaskhArabic: {
+    familyName: "Noto Naskh Arabic",
+    stack: '"Noto Naskh Arabic", serif',
+    faces: [
+      { weight: 400, file: "NotoNaskhArabic-Regular.woff2" },
+      { weight: 700, file: "NotoNaskhArabic-Bold.woff2" },
+    ],
+  },
+  gulzar: {
+    familyName: "Gulzar",
+    stack: '"Gulzar", serif',
+    faces: [{ weight: "400 700", file: "Gulzar-Regular.woff2" }],
+  },
+};
+
 function escapeXml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
@@ -42,21 +68,22 @@ ${bodyHtml}
 </html>`;
 }
 
-const STYLE_CSS = `
+function buildStyleCss(fontConfig) {
+  const fontFaces = fontConfig.faces
+    .map(
+      ({ weight, file }) => `
 @font-face {
-  font-family: "Noto Nastaliq Urdu";
-  font-weight: 400;
+  font-family: "${fontConfig.familyName}";
+  font-weight: ${weight};
   font-style: normal;
-  src: url("../fonts/NotoNastaliqUrdu-Regular.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Noto Nastaliq Urdu";
-  font-weight: 700;
-  font-style: normal;
-  src: url("../fonts/NotoNastaliqUrdu-Bold.woff2") format("woff2");
-}
+  src: url("../fonts/${file}") format("woff2");
+}`
+    )
+    .join("");
+  return `
+${fontFaces}
 body {
-  font-family: "Noto Nastaliq Urdu", serif;
+  font-family: ${fontConfig.stack};
   font-size: 1.15em;
   line-height: 2.1;
   direction: rtl;
@@ -78,6 +105,7 @@ blockquote.block-quote {
 .deadism-cover-title { font-weight: 700; font-size: 2em; text-align: center; margin-top: 35%; }
 .deadism-cover-author { text-align: center; margin-top: 1em; font-size: 1.1em; }
 `;
+}
 
 export async function buildEpub() {
   const [meta, intro, chapters] = await Promise.all([
@@ -106,14 +134,13 @@ export async function buildEpub() {
     { name: "META-INF/container.xml" }
   );
 
-  archive.append(STYLE_CSS, { name: "OEBPS/css/style.css" });
+  const fontConfig = FONT_OPTIONS[meta.fontKey] || FONT_OPTIONS.notoNastaliqUrdu;
+  archive.append(buildStyleCss(fontConfig), { name: "OEBPS/css/style.css" });
 
-  const [regularFont, boldFont] = await Promise.all([
-    fs.readFile(path.join(FONT_DIR, "NotoNastaliqUrdu-Regular.woff2")),
-    fs.readFile(path.join(FONT_DIR, "NotoNastaliqUrdu-Bold.woff2")),
-  ]);
-  archive.append(regularFont, { name: "OEBPS/fonts/NotoNastaliqUrdu-Regular.woff2" });
-  archive.append(boldFont, { name: "OEBPS/fonts/NotoNastaliqUrdu-Bold.woff2" });
+  for (const { file } of fontConfig.faces) {
+    const fontBuffer = await fs.readFile(path.join(FONT_DIR, file));
+    archive.append(fontBuffer, { name: `OEBPS/fonts/${file}` });
+  }
 
   const title = meta.title || "Deadism";
   const coverBody = `<div class="deadism-cover-title">${escapeXml(title)}</div>${
@@ -138,8 +165,9 @@ export async function buildEpub() {
   const manifestItems = [
     `<item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>`,
     `<item id="css" href="css/style.css" media-type="text/css"/>`,
-    `<item id="font-regular" href="fonts/NotoNastaliqUrdu-Regular.woff2" media-type="font/woff2"/>`,
-    `<item id="font-bold" href="fonts/NotoNastaliqUrdu-Bold.woff2" media-type="font/woff2"/>`,
+    ...fontConfig.faces.map(
+      ({ file }, i) => `<item id="font-${i}" href="fonts/${file}" media-type="font/woff2"/>`
+    ),
     `<item id="cover" href="text/cover.xhtml" media-type="application/xhtml+xml"/>`,
     `<item id="intro" href="text/intro.xhtml" media-type="application/xhtml+xml"/>`,
     ...chapterFiles.map(

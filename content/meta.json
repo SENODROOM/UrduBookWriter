@@ -1,4 +1,7 @@
 {
   "title": "Deadism",
-  "author": "Muhammad Saad Amin"
+  "author": "Muhammad Saad Amin",
+  "headerText": "MERA DEADISM",
+  "headerEnabled": false,
+  "fontKey": "notoNastaliqUrdu"
 }

@@ -3,6 +3,7 @@ import "./styles/app.css";
 
 import { BlockEditor } from "./editor/editor";
 import { Block, BlockType, BookData, Chapter, plainText } from "./editor/blocks";
+import { FONT_OPTIONS } from "./editor/fonts";
 import { renderPreview } from "./preview/preview";
 import { generateTocBlocks } from "./toc/generateToc";
 import {
@@ -16,7 +17,12 @@ import {
   saveToc,
 } from "./api/client";
 
-type View = { kind: "cover" } | { kind: "toc" } | { kind: "intro" } | { kind: "chapter"; id: string };
+type View =
+  | { kind: "cover" }
+  | { kind: "toc" }
+  | { kind: "intro" }
+  | { kind: "settings" }
+  | { kind: "chapter"; id: string };
 
 let book: BookData;
 let currentView: View = { kind: "cover" };
@@ -143,6 +149,7 @@ function renderSidebar() {
     navItem("Table of Contents", currentView.kind === "toc", () => selectView({ kind: "toc" }))
   );
   sidebarEl.appendChild(navItem("Author Intro", currentView.kind === "intro", () => selectView({ kind: "intro" })));
+  sidebarEl.appendChild(navItem("Settings", currentView.kind === "settings", () => selectView({ kind: "settings" })));
 
   const label = document.createElement("div");
   label.className = "nav-section-label";
@@ -284,12 +291,73 @@ function renderCoverForm() {
   editorPaneEl.appendChild(wrap);
 }
 
+function renderSettingsForm() {
+  const wrap = document.createElement("div");
+  wrap.className = "editor-scroll";
+  const form = document.createElement("div");
+  form.className = "cover-form";
+
+  const headerEnabledLabel = document.createElement("label");
+  headerEnabledLabel.className = "settings-checkbox-row";
+  const headerEnabledInput = document.createElement("input");
+  headerEnabledInput.type = "checkbox";
+  headerEnabledInput.checked = book.meta.headerEnabled;
+  const headerTextLabel = document.createElement("label");
+  headerTextLabel.textContent = "Header text";
+  const headerTextInput = document.createElement("input");
+  headerTextInput.value = book.meta.headerText;
+  headerTextInput.disabled = !book.meta.headerEnabled;
+  headerTextInput.oninput = () => {
+    book.meta.headerText = headerTextInput.value;
+    scheduleSave(persistMeta);
+    schedulePreview();
+  };
+  headerEnabledInput.onchange = () => {
+    book.meta.headerEnabled = headerEnabledInput.checked;
+    headerTextInput.disabled = !headerEnabledInput.checked;
+    scheduleSave(persistMeta);
+    schedulePreview();
+  };
+  headerEnabledLabel.append(headerEnabledInput, document.createTextNode(" Show running header on every page"));
+  headerTextLabel.appendChild(headerTextInput);
+
+  const fontLabel = document.createElement("label");
+  fontLabel.textContent = "Book font";
+  const fontSelect = document.createElement("select");
+  for (const opt of FONT_OPTIONS) {
+    const option = document.createElement("option");
+    option.value = opt.key;
+    option.textContent = opt.label;
+    option.selected = opt.key === book.meta.fontKey;
+    fontSelect.appendChild(option);
+  }
+  fontSelect.onchange = () => {
+    book.meta.fontKey = fontSelect.value;
+    scheduleSave(persistMeta);
+    schedulePreview();
+  };
+  fontLabel.appendChild(fontSelect);
+
+  const note = document.createElement("p");
+  note.className = "settings-note";
+  note.textContent = "The page number in the footer always shows and can't be turned off.";
+
+  form.append(headerEnabledLabel, headerTextLabel, fontLabel, note);
+  wrap.appendChild(form);
+  editorPaneEl.appendChild(wrap);
+}
+
 function renderEditorPane() {
   editorPaneEl.innerHTML = "";
   editor = null;
 
   if (currentView.kind === "cover") {
     renderCoverForm();
+    return;
+  }
+
+  if (currentView.kind === "settings") {
+    renderSettingsForm();
     return;
   }
 

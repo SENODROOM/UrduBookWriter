@@ -22,8 +22,18 @@ async function writeJson(filePath, data) {
   await fs.writeFile(filePath, JSON.stringify(data, null, 2) + "\n", "utf-8");
 }
 
-export function readMeta() {
-  return readJson(META_PATH, { title: "Deadism", author: "" });
+const META_DEFAULTS = {
+  title: "Deadism",
+  author: "",
+  headerText: "Deadism",
+  headerEnabled: true,
+  fontKey: "notoNastaliqUrdu",
+};
+
+export async function readMeta() {
+  const meta = await readJson(META_PATH, META_DEFAULTS);
+  // Merge so meta.json files saved before a field existed still get a sane default.
+  return { ...META_DEFAULTS, ...meta };
 }
 
 export function writeMeta(meta) {

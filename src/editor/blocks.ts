@@ -15,6 +15,9 @@ export interface Chapter {
 export interface BookMeta {
   title: string;
   author: string;
+  headerText: string;
+  headerEnabled: boolean;
+  fontKey: string;
 }
 
 export interface Toc {
