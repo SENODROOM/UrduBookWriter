@@ -51,22 +51,22 @@
      straight to generic "serif" for anything else (e.g. Latin text) is
      deliberate -- an intermediate named fallback here is a bug waiting to
      happen if it resolves to some unrelated system font on a given machine. */
-  --deadism-font: "Noto Nastaliq Urdu", serif;
-  --deadism-body-size: 16pt;
-  --deadism-line-height: 2.1;
-  --deadism-ink: #1a1a1a;
-  --deadism-rule: #333;
+  --ubw-font: "Noto Nastaliq Urdu", serif;
+  --ubw-body-size: 16pt;
+  --ubw-line-height: 2.1;
+  --ubw-ink: #1a1a1a;
+  --ubw-rule: #333;
 }
 
-.deadism-flow {
+.ubw-flow {
   direction: rtl;
-  font-family: var(--deadism-font);
-  font-size: var(--deadism-body-size);
-  line-height: var(--deadism-line-height);
-  color: var(--deadism-ink);
+  font-family: var(--ubw-font);
+  font-size: var(--ubw-body-size);
+  line-height: var(--ubw-line-height);
+  color: var(--ubw-ink);
 }
 
-.deadism-flow[lang="ur"] {
+.ubw-flow[lang="ur"] {
   unicode-bidi: isolate;
 }
 
@@ -87,7 +87,7 @@
 .block-quote {
   margin: 1.3em 2.2em;
   padding-inline-end: 1em;
-  border-inline-end: 3px solid var(--deadism-rule);
+  border-inline-end: 3px solid var(--ubw-rule);
   font-weight: 500;
   text-align: right;
 }
@@ -105,7 +105,7 @@
   content-area height is hardcoded instead: 8.5in page - 0.75in top margin -
   0.75in bottom margin = 7in. That gives flexbox true vertical centering.
 */
-.deadism-cover {
+.ubw-cover {
   height: 7in;
   display: flex;
   flex-direction: column;
@@ -115,24 +115,24 @@
   gap: 0.6em;
 }
 
-.deadism-cover-title {
-  /* The book title is always the Latin proper name "Deadism" (see the
-     running header), never Urdu, so it uses a plain Latin serif directly
-     rather than routing through the Urdu font stack. */
+.ubw-cover-title {
+  /* Book titles here are set in a plain Latin serif rather than routing
+     through the Urdu font stack -- see the running header for the same
+     convention. */
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 700;
   font-size: 2.4em;
   line-height: 1.4;
 }
 
-.deadism-cover-author {
-  font-family: var(--deadism-font);
+.ubw-cover-author {
+  font-family: var(--ubw-font);
   font-size: 1.1em;
 }
 
-.deadism-toc-title,
-.deadism-intro-title {
-  font-family: var(--deadism-font);
+.ubw-toc-title,
+.ubw-intro-title {
+  font-family: var(--ubw-font);
   font-weight: 700;
   font-size: 1.6em;
   text-align: center;

@@ -102,8 +102,8 @@ blockquote.block-quote {
   font-weight: 500;
   text-align: right;
 }
-.deadism-cover-title { font-weight: 700; font-size: 2em; text-align: center; margin-top: 35%; }
-.deadism-cover-author { text-align: center; margin-top: 1em; font-size: 1.1em; }
+.ubw-cover-title { font-weight: 700; font-size: 2em; text-align: center; margin-top: 35%; }
+.ubw-cover-author { text-align: center; margin-top: 1em; font-size: 1.1em; }
 `;
 }
 
@@ -143,8 +143,8 @@ export async function buildEpub() {
   }
 
   const title = meta.title || "Deadism";
-  const coverBody = `<div class="deadism-cover-title">${escapeXml(title)}</div>${
-    meta.author ? `<div class="deadism-cover-author">${escapeXml(meta.author)}</div>` : ""
+  const coverBody = `<div class="ubw-cover-title">${escapeXml(title)}</div>${
+    meta.author ? `<div class="ubw-cover-author">${escapeXml(meta.author)}</div>` : ""
   }`;
   archive.append(xhtmlDoc(title, coverBody), { name: "OEBPS/text/cover.xhtml" });
 

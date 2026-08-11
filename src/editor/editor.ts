@@ -13,7 +13,7 @@ export class BlockEditor {
     this.container.setAttribute("contenteditable", "true");
     this.container.setAttribute("dir", "rtl");
     this.container.setAttribute("lang", "ur");
-    this.container.classList.add("deadism-flow", "deadism-editor");
+    this.container.classList.add("ubw-flow", "ubw-editor");
 
     this.render();
     this.container.addEventListener("input", this.handleInput);

@@ -27,12 +27,12 @@
 }
 
 /* Front matter (cover, TOC, author intro) gets no running header/footer. */
-.deadism-frontmatter {
+.ubw-frontmatter {
   page: front;
 }
 
 /* Main content restarts page numbering at 1 and gets the running header/footer. */
-.deadism-content-flow {
+.ubw-content-flow {
   page: content;
   counter-reset: page 1;
 }
@@ -72,7 +72,7 @@
     box-sizing: border-box;
     height: 0.6in;
     margin-top: 0.15in;
-    border-top: var(--deadism-header-border, 3px double var(--deadism-rule, #333));
+    border-top: var(--ubw-header-border, 3px double var(--ubw-rule, #333));
   }
 
   @top-left {
@@ -80,12 +80,12 @@
     box-sizing: border-box;
     height: 0.6in;
     margin-top: 0.15in;
-    border-top: var(--deadism-header-border, 3px double var(--deadism-rule, #333));
+    border-top: var(--ubw-header-border, 3px double var(--ubw-rule, #333));
     width: 1.1in;
   }
 
   @top-center {
-    content: var(--deadism-header-text, "Deadism");
+    content: var(--ubw-header-text, "Deadism");
     box-sizing: border-box;
     height: 0.6in;
     margin-top: 0.15in;
@@ -104,7 +104,7 @@
     box-sizing: border-box;
     height: 0.6in;
     margin-top: 0.15in;
-    border-top: var(--deadism-header-border, 3px double var(--deadism-rule, #333));
+    border-top: var(--ubw-header-border, 3px double var(--ubw-rule, #333));
     width: 1.5in;
   }
 
@@ -113,7 +113,7 @@
     box-sizing: border-box;
     height: 0.6in;
     margin-top: 0.15in;
-    border-top: var(--deadism-header-border, 3px double var(--deadism-rule, #333));
+    border-top: var(--ubw-header-border, 3px double var(--ubw-rule, #333));
   }
 
   @bottom-left-corner {
@@ -121,7 +121,7 @@
     box-sizing: border-box;
     height: 0.6in;
     margin-bottom: 0.15in;
-    border-bottom: 3px double var(--deadism-rule, #333);
+    border-bottom: 3px double var(--ubw-rule, #333);
   }
 
   @bottom-left {
@@ -129,7 +129,7 @@
     box-sizing: border-box;
     height: 0.6in;
     margin-bottom: 0.15in;
-    border-bottom: 3px double var(--deadism-rule, #333);
+    border-bottom: 3px double var(--ubw-rule, #333);
     width: 2.9in;
   }
 
@@ -151,7 +151,7 @@
     box-sizing: border-box;
     height: 0.6in;
     margin-bottom: 0.15in;
-    border-bottom: 3px double var(--deadism-rule, #333);
+    border-bottom: 3px double var(--ubw-rule, #333);
   }
 }
 

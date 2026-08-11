@@ -2,7 +2,7 @@ import { defineConfig, type Plugin } from "vite";
 
 function apiPlugin(): Plugin {
   return {
-    name: "deadism-api",
+    name: "ubw-api",
     async configureServer(server) {
       const { createApiApp } = await import("./server/index.js");
       server.middlewares.use(createApiApp());

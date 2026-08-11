@@ -3,8 +3,8 @@ import { renderPreview } from "../preview/preview";
 
 declare global {
   interface Window {
-    __deadismPdfReady?: boolean;
-    __deadismPdfError?: string;
+    __ubwPdfReady?: boolean;
+    __ubwPdfError?: string;
   }
 }
 
@@ -29,9 +29,9 @@ async function main() {
     el.style.boxShadow = "none";
   });
 
-  window.__deadismPdfReady = true;
+  window.__ubwPdfReady = true;
 }
 
 main().catch((err) => {
-  window.__deadismPdfError = String(err);
+  window.__ubwPdfError = String(err);
 });

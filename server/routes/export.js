@@ -29,10 +29,10 @@ export function exportRouter() {
 
       await page.goto(`${origin}/print.html`, { waitUntil: "networkidle0", timeout: 60000 });
       await page.waitForFunction(
-        "window.__deadismPdfReady === true || !!window.__deadismPdfError",
+        "window.__ubwPdfReady === true || !!window.__ubwPdfError",
         { timeout: 60000 }
       );
-      const renderError = await page.evaluate(() => window.__deadismPdfError);
+      const renderError = await page.evaluate(() => window.__ubwPdfError);
       if (renderError) throw new Error(`Preview render failed: ${renderError}`);
 
       const pdf = await page.pdf({

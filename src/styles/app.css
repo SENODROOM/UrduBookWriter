@@ -165,12 +165,12 @@ body {
   padding: 30px 40px;
 }
 
-.deadism-editor {
+.ubw-editor {
   outline: none;
   min-height: 100%;
 }
 
-.deadism-editor .block {
+.ubw-editor .block {
   outline: none;
 }
 
@@ -191,7 +191,7 @@ body {
 }
 
 .cover-form input {
-  font-family: var(--deadism-font);
+  font-family: var(--ubw-font);
   font-size: 16pt;
   direction: rtl;
   padding: 8px 10px;
