@@ -141,7 +141,7 @@ function renderSidebar() {
   sidebarEl.innerHTML = "";
 
   const h1 = document.createElement("h1");
-  h1.textContent = "Deadism";
+  h1.textContent = "Urdu Book Writer";
   sidebarEl.appendChild(h1);
 
   sidebarEl.appendChild(navItem("Cover", currentView.kind === "cover", () => selectView({ kind: "cover" })));
